@@ -1,0 +1,7 @@
+package com.firstspringproject.dream_shops.exceptions;
+
+public class UserAlreadyExistsException extends RuntimeException {
+    public UserAlreadyExistsException (String message) {
+        super(message);
+    }
+}
