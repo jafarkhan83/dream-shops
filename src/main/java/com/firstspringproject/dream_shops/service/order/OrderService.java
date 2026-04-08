@@ -5,9 +5,12 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.firstspringproject.dream_shops.dto.OrderDto;
 import com.firstspringproject.dream_shops.enums.OrderStatus;
+import com.firstspringproject.dream_shops.exceptions.CartNotFoundException;
 import com.firstspringproject.dream_shops.exceptions.OrderNotFoundException;
 import com.firstspringproject.dream_shops.model.Cart;
 import com.firstspringproject.dream_shops.model.Order;
@@ -25,11 +28,12 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ICartService cartService;
+    private final ModelMapper modelMapper;
     
     @Override
     public Order placeOrder(Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
-
+        if (cart == null) throw new CartNotFoundException("This user has no cart!");
         Order order = createOrder(cart);
         List<OrderItem> orderItems = createOrderItems(order, cart);
         order.setOrderItems(new HashSet<>(orderItems));
@@ -73,5 +77,9 @@ public class OrderService implements IOrderService {
     public List<Order> getUserOrders(Long userId) {
         return orderRepository.findByUserId(userId);
     }
-    
+
+    @Override
+    public OrderDto convertToDto(Order order) {
+        return modelMapper.map(order, OrderDto.class);
+    }
 }

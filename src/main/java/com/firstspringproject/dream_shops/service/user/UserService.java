@@ -2,8 +2,10 @@ package com.firstspringproject.dream_shops.service.user;
 
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.firstspringproject.dream_shops.dto.UserDto;
 import com.firstspringproject.dream_shops.exceptions.UserAlreadyExistsException;
 import com.firstspringproject.dream_shops.exceptions.UserNotExistsException;
 import com.firstspringproject.dream_shops.model.User;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
     
     @Override
     public User getUserById(Long userId) {
@@ -35,7 +38,7 @@ public class UserService implements IUserService {
                 user.setFirstName(req.getFirstName());
                 user.setLastName(req.getLastName());
                 return userRepository.save(user);
-            }).orElseThrow(() -> new UserAlreadyExistsException("This email addresses is occupied!"));
+            }).orElseThrow(() -> new UserAlreadyExistsException("This email address is occupied!"));
     }
 
     @Override
@@ -53,6 +56,11 @@ public class UserService implements IUserService {
             .ifPresentOrElse(userRepository::delete, () -> {
                 throw new UserNotExistsException("No user exists by this id!");
             });
+    }
+
+    @Override
+    public UserDto convertToDto(User user) {
+        return modelMapper.map(user, UserDto.class);
     }
     
 }

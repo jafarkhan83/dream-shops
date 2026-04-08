@@ -25,9 +25,9 @@ public class CartItemController {
     private final ICartService cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required=false) Long cartId, @RequestParam Long productId, @RequestParam int quantity) {
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required=false) Long cartId, @RequestParam Long productId, @RequestParam int quantity, @RequestParam Long userId) {
         try {
-            if (cartId == null) cartId = cartService.initializeNewCart();
+            if (cartId == null) cartId = cartService.initializeNewCart(userId);
             cartitemService.addItemToCart(cartId, productId, quantity);
             return ResponseEntity.ok(new ApiResponse("success!", null));    
         } catch (CartItemNotFoundException e) {
