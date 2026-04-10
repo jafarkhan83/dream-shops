@@ -6,4 +6,6 @@ import com.firstspringproject.dream_shops.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     public boolean existsByEmail(String email);
+
+    public User findByEmail(String email);
 }
