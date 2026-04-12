@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.firstspringproject.dream_shops.exceptions.CartItemNotFoundException;
+import com.firstspringproject.dream_shops.exceptions.UserNotExistsException;
 import com.firstspringproject.dream_shops.model.User;
 import com.firstspringproject.dream_shops.response.ApiResponse;
 import com.firstspringproject.dream_shops.service.cart.ICartService;
@@ -36,7 +37,7 @@ public class CartItemController {
             if (cartId == null) cartId = cartService.initializeNewCart(user.getId());
             cartitemService.addItemToCart(cartId, productId, quantity);
             return ResponseEntity.ok(new ApiResponse("success!", null));    
-        } catch (CartItemNotFoundException e) {
+        } catch (CartItemNotFoundException | UserNotExistsException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (JwtException e) {
             return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.firstspringproject.dream_shops.security.user.ShopUserDetails;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,10 +23,10 @@ import io.jsonwebtoken.security.SignatureException;
 @Component
 public class JwtUtils {
 
-    @Value("${dreamshops.app.jwtSecret}")
+    @Value("${auth.token.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${dreamshops.app.jwtExpirationMs}")
+    @Value("${auth.token.jwtExpirationMs}")
     private int expirationTime;
 
     public String generateTokenForUser(Authentication authentication) {
@@ -60,7 +59,7 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token);
             return true;   
         } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | SignatureException | IllegalArgumentException e) {
-            throw new JwtException(e.getMessage());
+            return false;
         }
     }
     

@@ -5,6 +5,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,7 @@ public class ProductController {
         
     }
 
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct (@RequestBody AddProductRequest product) {
         try {
@@ -59,6 +61,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateProduct (@RequestBody ProductUpdateRequest request, @PathVariable Long id) {
         try {
@@ -70,6 +73,7 @@ public class ProductController {
         }
     }
     
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deleteProduct (@PathVariable Long id) {
         try {

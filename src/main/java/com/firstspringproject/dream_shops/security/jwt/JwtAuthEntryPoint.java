@@ -27,7 +27,10 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
         final Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
-        body.put("message", authException.getMessage());
+        
+        // 🚨 FIX: Replace the ugly exception message with your own clean, custom text!
+        body.put("message", "Invalid or expired token. Please log in and try again."); 
+        
         body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
